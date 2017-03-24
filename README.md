@@ -1,6 +1,6 @@
 # mqtt_monitor
 
-Provides a daemon to check on a mqtt broker by sending scheduled messages and execute shell commands depending on the broker reply. The idea is to monitor different apps or devices that comunicate via MQTT protocol. It is developed primarly for monitoring several raspberry Pi in a Home Automation network, but can be used for any kind of MQTT monitoring.
+Provides a daemon to check on a mqtt broker by sending scheduled messages and execute shell commands depending on the broker reply. The idea is to monitor different apps or devices that comunicate via MQTT protocol. It is developed primarly for monitoring several services on raspberry Pi's in a Home Automation network, but can be used for any kind of MQTT monitoring.
 
 # Stage
 The software is really in alpha level, so use it with caution.
