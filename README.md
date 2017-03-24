@@ -29,17 +29,23 @@ rules:
 - incoming:
    expect: monitor/controller/ok
    on_message: echo "controller is working"
-   replay: monitor/controller/checked
+   reply: monitor/controller/checked
+   reply_payload: ciao
 
 ```
+
+This rule waits for the boker to publish in the "monitor/controller/ok" topic. When it gets a message execute the shell command in "on_message" key.
+ It also reply to the broker in "monitor/controller/checked" topic (reply:) with a payload of "ciao".
+
+ Allowed keys are:
 
     - expect: a topic that the broker may send
     - expect_payload: optional payload to be received in the expect topic
     - on_message: a shell command that is executed
-    - replay: a topic to publish back when the first message is arrived
-    - replay_payload: optional payload to publish in the replay topic
+    - reply: a topic to publish back when the first message is arrived
+    - reply_payload: optional payload to publish in the reply topic
 
-Either on_message or replay or both should be specified, otherwise it does not do anything.
+Either on_message or reply or both should be specified, otherwise it does not do anything.
 
 Outgoing rules inquire the broker and react to it:
 
@@ -56,6 +62,13 @@ rules:
    on_timeout: server controller restart
 
 ```
+
+This rule publish to "monitor/controller/status" topic (send:) every 600 secs. When the message is published, it waits 5 secs (timeout:)
+for the boker to reply in the "monitor/controller/ok" topic. If the broker replies the "on_message:" command is executed in a shell,
+otherwise the command in the "on_timeout:" is execute.
+
+Allowed keys are:
+
 
     - send: a topic to publish to inquire the broker
     - send_payload: optional paylaod for the send topic

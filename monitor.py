@@ -39,10 +39,12 @@ class Mqmonitor:
             action['name']=action['id']
         if "on_timeout" in action and "timeout" not in action:
             action["timeout"]=settings["timeout"]
-        if "replay" in action and "replay_payload" not in action:
-            action["replay_payload"]=None
+        if "reply" in action and "reply_payload" not in action:
+            action["reply_payload"]=None
         if "send" in action and "send_payload" not in action:
             action["send_paylaod"]=None
+        if "expect" in action and "expect_payload" not in action:
+            action["expect_payload"]=None
 
         return(action)
 
@@ -63,15 +65,16 @@ class Mqmonitor:
     def on_message(self,client, userdata, msg):
         for rule in self.incoming:
             if rule['expect']==str(msg.topic):
-                if "expect_payload" in rule and rule["expect_payload"]!=cleanmsg(msg.payload):
-                    print("message %s received but playlod %s not good" % (str(msg.topic),cleanmsg(msg.payload)))
+
+                if rule["expect_payload"] and rule["expect_payload"]!=cleanmsg(msg.payload):
+                    print("message %s with payload %s received but does not match %s " % (str(msg.topic),cleanmsg(msg.payload),rule["expect_payload"]))
                     continue
                 print("received message %s" % str(msg.topic))
                 self.execute_shell(rule['on_message'])
                 if "on_timeout" in rule:
                     self.sched.scheduler.remove_job(rule['id']+"on_timeout")
-                if "replay" in rule:
-                    self.mqconnect.send(rule['replay'],rule['replay_payload'])
+                if "reply" in rule:
+                    self.mqconnect.send(rule['reply'],rule['reply_payload'])
 
     def start(self):
        self.mqconnect.client.on_message=self.on_message
