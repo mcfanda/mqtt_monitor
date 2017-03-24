@@ -5,7 +5,7 @@ Provides a daemon to check on a mqtt broker by sending scheduled messages and ex
 # Stage
 The software is really in alpha level, so use it with caution.
 
-# Usage
+# Setup
 
 Create yaml file named "settings.yaml" and define connection details:
 
@@ -64,5 +64,12 @@ rules:
 
 
 
+
+# Setup
+
+```bash
+monitor /path/to/setting/
+
 ```
 
+Specify only the folder that contains the settings.yaml file
