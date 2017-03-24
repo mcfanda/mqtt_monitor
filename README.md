@@ -32,6 +32,7 @@ rules:
    send: monitor/controller/checked
 
 ```
+
     - expect: a topic that the broker may send
     - on_message: a shell command that is executed
     - send: a topic to publish back when the first message is arrived
@@ -53,6 +54,7 @@ rules:
    on_timeout: server controller restart
 
 ```
+
     - send: a topic to publish to inquire the broker
     - expect: a topic that the broker should send back
     - on_message: a shell command that is executed if the expect topic is returned by the broker
@@ -65,7 +67,7 @@ rules:
 
 
 
-# Setup
+# Usage
 
 ```bash
 monitor /path/to/setting/
@@ -73,3 +75,7 @@ monitor /path/to/setting/
 ```
 
 Specify only the folder that contains the settings.yaml file
+
+# Init
+
+Use the file in the init folder to lauch monitor at boot time with systemd or init.d
