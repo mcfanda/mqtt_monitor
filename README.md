@@ -82,7 +82,7 @@ Allowed keys are:
 
 
 Obviously, one can use this module as a shell actuator of MQTT protocol.
-Imagine you want to erase a directory on your server whenever the alarm goes off (pretty silly example) , you can sent a rule like this:
+Imagine you want to erase a directory on your server whenever the alarm goes off, that is the sensors turn on, you can sent a rule like this (silly example, I know):
 
 ```yaml
 
