@@ -3,9 +3,9 @@ import sys
 import random
 import subprocess
 import paho.mqtt.client as mqtt
-from mqconnect import Mqconnect, cleanmsg
-from conf import Conf
-from scheduler import Scheduler
+from modules.mqconnect import Mqconnect, cleanmsg
+from modules.conf import Conf
+from modules.scheduler import Scheduler
 from pprint import pprint
 import datetime
 
@@ -55,7 +55,7 @@ class Mqmonitor:
                 new=k[what]
                 new=self.process(new)
                 actions.append(k[what])
-        pprint(actions)
+        #pprint(actions)
         return(actions)
 
     def execute_shell(self,command):
@@ -71,7 +71,10 @@ class Mqmonitor:
                 print("received message %s" % str(msg.topic))
                 self.execute_shell(rule['on_message'])
                 if "on_timeout" in rule:
-                    self.sched.scheduler.remove_job(rule['id']+"on_timeout")
+                    try:
+                        self.sched.scheduler.remove_job(rule['id']+"on_timeout")
+                    except:
+                        print("not timeout rule present")
                 if "reply" in rule:
                     self.mqconnect.send(rule['reply'],rule['reply_payload'])
 
