@@ -1,0 +1,25 @@
+server:
+ ip: MQTTIP
+ port: PORT
+ username: USER
+ password: PASS
+
+mqtt:
+ topic: monitor/#
+
+
+settings:
+ outgoing_interval: 100
+
+rules:
+- incoming:
+   expect: monitor/controller
+   on_message: echo "controller is working"
+- outgoing:
+   send: monitor/robot
+   expect: monitor/robot
+   interval:
+    seconds: 600
+   on_message: echo "monitoring robot fine"
+   timeout: 5
+   on_timeout: echo "robot is not getting response from mqtt"
