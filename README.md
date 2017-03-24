@@ -29,15 +29,17 @@ rules:
 - incoming:
    expect: monitor/controller/ok
    on_message: echo "controller is working"
-   send: monitor/controller/checked
+   replay: monitor/controller/checked
 
 ```
 
     - expect: a topic that the broker may send
+    - expect_payload: optional payload to be received in the expect topic
     - on_message: a shell command that is executed
-    - send: a topic to publish back when the first message is arrived
-    
-Either on_message or send or both should be specified, otherwise it does not do anything.
+    - replay: a topic to publish back when the first message is arrived
+    - replay_payload: optional payload to publish in the replay topic
+
+Either on_message or replay or both should be specified, otherwise it does not do anything.
 
 Outgoing rules inquire the broker and react to it:
 
@@ -56,12 +58,14 @@ rules:
 ```
 
     - send: a topic to publish to inquire the broker
+    - send_payload: optional paylaod for the send topic
     - expect: a topic that the broker should send back
+    - expect_payload: option payload for the expect topic
     - on_message: a shell command that is executed if the expect topic is returned by the broker
     - on_timeout: a shell command that is executed if the broker does not reply
     - timeout: seconds to wait for the borker reply
-    - interval: interval in seconds between each inquiring. Can be seconds, minutes, hours, days, weeks. 
-    
+    - interval: interval in seconds between each inquiring. Can be seconds, minutes, hours, days, weeks.
+
 
 
 

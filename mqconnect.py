@@ -23,14 +23,14 @@ class Mqconnect:
     def start(self):
         self.client.connect(self.ip, self.port, 60)
         self.client.loop_forever()
-        
+
     def on_connect(self, client, userdata, flags, rc):
         print("Mqconnect: Connected to topic %s with result code %s" % (self.topic,str(rc)))
         self.client.subscribe(self.topic)
-    
+
     def on_message(self,client, userdata, msg):
         print("Mqconnect: received "+str(msg.topic))
-              
+
 
     def send(self,topic,msg=None):
        self.client.publish(topic,msg,retain=False)
@@ -39,7 +39,7 @@ class Mqconnect:
 
 
 
-        
+
 if __name__ == "__main__":
-	mq=Mqconnect("127.0.0.1",1883)
-	mq.start()
+  mq=Mqconnect("127.0.0.1",1883)
+  mq.start()
