@@ -21,7 +21,7 @@ class Scheduler:
     def __init__(self):
         self.scheduler = BackgroundScheduler()
         self.scheduler.start()
-#        self.job=doNothing
+        self.job=doNothing
 #        self.scheduler.add_job(self.introspect,'interval',id="intro", seconds=5,replace_existing=True)
 
     def setJob(self,fun):
