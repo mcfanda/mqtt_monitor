@@ -82,13 +82,13 @@ Allowed keys are:
 
 
 Obviously, one can use this module as a shell actuator of MQTT protocol.
-Imagine you want to erase a directory on your server whenever the allarm goes off (pretty silly example) , you can sent a rule like this:
+Imagine you want to erase a directory on your server whenever the alarm goes off (pretty silly example) , you can sent a rule like this:
 
 ```yaml
 
 rules:
 - incoming:
-   expect: house/allarm
+   expect: house/alarm
    expect_payload: "on"
    on_message: rm -r /path/to/secrets
    reply: house/privacy
