@@ -18,9 +18,11 @@ class Mqmonitor:
         conf=Conf(path)
         sets=conf.getValue("settings","server")
         self.mqconnect=Mqconnect(sets['ip'],sets['port'])
+
         if "username" in sets:
                 self.mqconnect.client.username_pw_set(sets['username'],sets['password'])
         mqtt_options=conf.getValue("settings","mqtt")
+
         if mqtt_options and "topic" in mqtt_options:
                 self.mqconnect.topic=mqtt_options['topic']
 
