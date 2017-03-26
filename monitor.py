@@ -21,7 +21,7 @@ class Mqmonitor:
         if "username" in sets:
                 self.mqconnect.client.username_pw_set(sets['username'],sets['password'])
         mqtt_options=conf.getValue("settings","mqtt")
-        if "topic" in mqtt_options:
+        if mqtt_options and "topic" in mqtt_options:
                 self.mqconnect.topic=mqtt_options['topic']
 
         self.rules=conf.getValue("settings","rules")
@@ -95,5 +95,8 @@ class Mqmonitor:
           self.mqconnect.send(rule['send'],rule['send_paylaod'])
 
 if __name__ == "__main__":
+       if len(sys.argv)<2 :
+          print("Please specify a setting file folder")
+          exit(1)
        mqm=Mqmonitor(sys.argv[1])
        mqm.start()
