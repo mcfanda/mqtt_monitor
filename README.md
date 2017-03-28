@@ -110,3 +110,14 @@ Specify only the folder that contains the settings.yaml file
 # Init
 
 Use the file in the init folder to lauch monitor at boot time with systemd or init.d
+
+# Mqtt settings
+
+You can set some defaults for the mqtt connection in the setting.yaml file
+
+```yaml
+mqtt:
+ will: /monitor/controller/connection
+
+```
+    - will: set the topic that will be published if connection is lost. Payload is "lost"
