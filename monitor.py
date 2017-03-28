@@ -26,6 +26,9 @@ class Mqmonitor:
         if mqtt_options and "topic" in mqtt_options:
                 self.mqconnect.topic=mqtt_options['topic']
 
+        if mqtt_options and "will" in mqtt_options:
+                self.mqconnect.client.will_set(mqtt_options['will'],"lost")
+
         self.rules=conf.getValue("settings","rules")
         self.incoming=self.getActions("incoming")
         self.outgoing=self.getActions("outgoing")

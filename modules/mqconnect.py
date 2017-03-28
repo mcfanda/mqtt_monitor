@@ -16,10 +16,13 @@ class Mqconnect:
         self.messages ={}
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
+        self.client.on_disconnect = self.on_disconnect
         self.topic="#"
 
         if username:
              self.client.username_pw_set(username, password=pasw)
+
+    
     def start(self):
         self.client.connect(self.ip, self.port, 60)
         self.client.loop_forever()
@@ -31,6 +34,9 @@ class Mqconnect:
     def on_message(self,client, userdata, msg):
         print("Mqconnect: received "+str(msg.topic))
 
+    def on_disconnect(self, client, obj, rc):
+        print("connection to broker is gone. Trying reconnect...")
+        client.reconnect()
 
     def send(self,topic,msg=None):
        self.client.publish(topic,msg,retain=False)
