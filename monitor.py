@@ -74,12 +74,16 @@ class Mqmonitor:
                     print("message %s with payload %s received but does not match %s " % (str(msg.topic),cleanmsg(msg.payload),rule["expect_payload"]))
                     continue
                 print("received message %s" % str(msg.topic))
-                self.execute_shell(rule['on_message'])
+   
+                if "on_message" in rule:
+                    self.execute_shell(rule['on_message'])
+  
                 if "on_timeout" in rule:
                     try:
                         self.sched.scheduler.remove_job(rule['id']+"on_timeout")
                     except:
                         print("not timeout rule present")
+                
                 if "reply" in rule:
                     self.mqconnect.send(rule['reply'],rule['reply_payload'])
 
