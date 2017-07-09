@@ -47,7 +47,7 @@ class Mqmonitor:
         if "reply" in action and "reply_payload" not in action:
             action["reply_payload"]=None
         if "send" in action and "send_payload" not in action:
-            action["send_paylaod"]=None
+            action["send_payload"]=None
         if "expect" in action and "expect_payload" not in action:
             action["expect_payload"]=None
 

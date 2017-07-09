@@ -35,6 +35,10 @@ case "$1" in
 	kill -9 $PID
 	echo "done."
 	;;
+  status)
+        status_of_proc "$NAME" "$DAEMON" && exit 0 || exit $?
+        ;;
+
   *)
 	echo "Usage: /etc/init.d/monitor {start|stop}"
 	exit 1
