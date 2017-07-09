@@ -50,6 +50,8 @@ class Mqmonitor:
             action["send_payload"]=None
         if "expect" in action and "expect_payload" not in action:
             action["expect_payload"]=None
+        if "reply_on_timeout" in action and "reply_on_timeout_payload" not in action:
+            action["reply_on_timeout_payload"]=None
 
         return(action)
 
@@ -87,6 +89,14 @@ class Mqmonitor:
                 if "reply" in rule:
                     self.mqconnect.send(rule['reply'],rule['reply_payload'])
 
+                if "reply_on_timeout" in rule:
+                    try:
+                        self.sched.scheduler.remove_job(rule['id']+"on_timeout_reply")
+                    except:
+                        print("not timeout reply present")
+
+
+
     def start(self):
        self.mqconnect.client.on_message=self.on_message
        self.mqconnect.start()
@@ -97,12 +107,17 @@ class Mqmonitor:
           when=when+datetime.timedelta(seconds=rule['timeout'])
           print("action %s trigger at %s if timeout" % (rule['name'], when))
           print("untrigger action by %s within %s" % (rule['expect'], rule['timeout']))
-
           id=rule['id']+"on_timeout"
           self.sched.scheduler.add_job(self.execute_shell,trigger='date',run_date=when,args=[rule['on_timeout']],id=id,replace_existing=True)
       if "send" in rule:
           self.mqconnect.send(rule['send'],rule['send_payload'])
-
+      if "reply_on_timeout":
+          when=datetime.datetime.now()
+          when=when+datetime.timedelta(seconds=rule['timeout'])
+          id=rule['id']+"on_timeout_reply"
+          self.sched.scheduler.add_job(self.mqconnect.send,trigger='date',run_date=when,args=[rule['reply_on_timeout'],rule['reply_on_timeout_payload']],id=id,replace_existing=True) 
+ 
+          
 if __name__ == "__main__":
        if len(sys.argv)<2 :
           print("Please specify a setting file folder")
