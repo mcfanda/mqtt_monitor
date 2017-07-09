@@ -28,6 +28,7 @@ class Mqconnect:
         con=False
         while (not con):
           try:
+             print("trying connecting to mqtt broker")
              self.client.connect(self.ip, self.port, 60)
              con=True
           except Exception:
