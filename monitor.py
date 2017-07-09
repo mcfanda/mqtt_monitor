@@ -77,7 +77,7 @@ class Mqmonitor:
                 if rule["expect_payload"] and rule["expect_payload"]!=cleanmsg(msg.payload):
                     print("message %s with payload %s received but does not match %s " % (str(msg.topic),cleanmsg(msg.payload),rule["expect_payload"]))
                     continue
-                print("received message %s" % str(msg.topic))
+                print("Processing message %s with payload %s received and match %s " % (str(msg.topic),cleanmsg(msg.payload),rule["expect_payload"]))
    
                 if "on_message" in rule:
                     self.execute_shell(rule['on_message'])
