@@ -43,7 +43,7 @@ class Mqconnect:
            self.client.subscribe(self.topic)
 
         else:
-             print("Mqconnect: Connection problems with code %s" % (self.topic,str(rc)))
+             print("Mqconnect: Connection problems with code %s" % (str(rc)))
              print("Trying again:")
              sleep(10)
              self.start()
