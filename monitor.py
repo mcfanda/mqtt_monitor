@@ -97,7 +97,7 @@ class Mqmonitor:
           id=rule['id']+"on_timeout"
           self.sched.scheduler.add_job(self.execute_shell,trigger='date',run_date=when,args=[rule['on_timeout']],id=id,replace_existing=True)
       if "send" in rule:
-          self.mqconnect.send(rule['send'],rule['send_paylaod'])
+          self.mqconnect.send(rule['send'],rule['send_payload'])
 
 if __name__ == "__main__":
        if len(sys.argv)<2 :
