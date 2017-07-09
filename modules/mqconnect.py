@@ -25,10 +25,13 @@ class Mqconnect:
 
     
     def start(self):
-        try:
-          self.client.connect(self.ip, self.port, 60)
-        except Exception:
-          print("Problem with the connection") 
+        con=False
+        while (not con):
+          try:
+             self.client.connect(self.ip, self.port, 60)
+             con=True
+          except Exception:
+             print("Problem with the connection") 
              
  
     def on_connect(self, client, userdata, flags, rc):
