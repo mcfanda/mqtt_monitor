@@ -71,6 +71,7 @@ class Mqmonitor:
         print(output)
 
     def on_message(self,client, userdata, msg):
+        print("message received %s , %s" % (str(msg.topic),cleanmsg(msg.payload)))
         for rule in self.incoming:
             if rule['expect']==str(msg.topic):
                 if rule["expect_payload"] and rule["expect_payload"]!=cleanmsg(msg.payload):
