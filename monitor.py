@@ -37,7 +37,8 @@ class Mqmonitor:
         self.sched.setJob(self.job)
         for rule in self.outgoing:
                 self.sched.dispatch(rule)
-
+        for r in self.incoming:
+             print(r['name'])
     def process(self,action):
         action['id']=str(random.randint(1, 10000000000000))
         if "name" not in action:
