@@ -25,13 +25,18 @@ class Mqconnect:
 
     
     def start(self):
-        self.client.connect(self.ip, self.port, 60)
-        self.client.loop_forever()
-
+        try:
+          self.client.connect(self.ip, self.port, 60)
+        except Exception:
+          print("Problem with the connection") 
+             
+ 
     def on_connect(self, client, userdata, flags, rc):
         if rc==0:
            print("Mqconnect: Connected to topic %s with result code %s" % (self.topic,str(rc)))
            self.client.subscribe(self.topic)
+           self.client.loop_forever()
+
         else:
              print("Mqconnect: Connection problems with code %s" % (self.topic,str(rc)))
              print("Trying again:")
