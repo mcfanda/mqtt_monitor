@@ -32,7 +32,7 @@ class Mqconnect:
              con=True
           except Exception:
              print("Problem with the connection") 
-             
+          sleep(15)   
  
     def on_connect(self, client, userdata, flags, rc):
         if rc==0:
