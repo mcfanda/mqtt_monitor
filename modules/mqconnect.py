@@ -57,6 +57,7 @@ class Mqconnect:
         while (not con):
           try:
              client.reconnect()
+             con=True
           except Exception:
              print("no joy")
           sleep(10)
