@@ -76,6 +76,9 @@ Allowed keys are:
     - expect_payload: option payload for the expect topic
     - on_message: a shell command that is executed if the expect topic is returned by the broker
     - on_timeout: a shell command that is executed if the broker does not reply
+    - reply_on_timeout: a topic to send to if the broker does not reply
+    - reply_on_timeout_payload: optional payload for reply on timeout
+
     - timeout: seconds to wait for the borker reply
     - interval: interval in seconds between each inquiring. Can be seconds, minutes, hours, days, weeks.
 
