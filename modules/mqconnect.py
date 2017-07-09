@@ -32,7 +32,7 @@ class Mqconnect:
              con=True
           except Exception:
              print("Problem with the connection") 
-          sleep(30)   
+          sleep(15)   
  
     def on_connect(self, client, userdata, flags, rc):
         if rc==0:
@@ -51,6 +51,7 @@ class Mqconnect:
 
     def on_disconnect(self, client, obj, rc):
         print("connection to broker is gone. Trying reconnect...")
+        sleep(15)
         client.reconnect()
 
     def send(self,topic,msg=None):
