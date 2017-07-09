@@ -2,6 +2,7 @@
 
 import paho.mqtt.client as mqtt
 from datetime import datetime
+from time import sleep
 
 def cleanmsg(bytestring):
            res=str(bytestring)[1:]
@@ -28,9 +29,15 @@ class Mqconnect:
         self.client.loop_forever()
 
     def on_connect(self, client, userdata, flags, rc):
-        print("Mqconnect: Connected to topic %s with result code %s" % (self.topic,str(rc)))
-        self.client.subscribe(self.topic)
-
+        if rc==0:
+           print("Mqconnect: Connected to topic %s with result code %s" % (self.topic,str(rc)))
+           self.client.subscribe(self.topic)
+        else:
+             print("Mqconnect: Connection problems with code %s" % (self.topic,str(rc)))
+             print("Trying again:")
+             sleep(10)
+             self.start()
+             
     def on_message(self,client, userdata, msg):
         print("Mqconnect: received "+str(msg.topic))
 
