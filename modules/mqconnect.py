@@ -39,8 +39,10 @@ class Mqconnect:
         client.reconnect()
 
     def send(self,topic,msg=None):
-       self.client.publish(topic,msg,retain=False)
-
+       try:
+          self.client.publish(topic,msg,retain=False)
+       except Exception:
+           print("There is a problem in sendinf the message to %s" % topic )
 
 
 

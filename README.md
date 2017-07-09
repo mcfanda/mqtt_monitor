@@ -34,7 +34,7 @@ rules:
 
 ```
 
-This rule waits for the boker to publish in the "monitor/controller/ok" topic. When it gets a message execute the shell command in "on_message" key.
+This rule waits for the broker to publish in the "monitor/controller/ok" topic. When it gets a message execute the shell command in "on_message" key.
  It also reply to the broker in "monitor/controller/checked" topic (reply:) with a payload of "ciao".
 
  Allowed keys are:
@@ -63,7 +63,7 @@ rules:
 
 ```
 
-This rule publish to "monitor/controller/status" topic (send:) every 600 secs. When the message is published, it waits 5 secs (timeout:)
+This rule publishes to "monitor/controller/status" topic (send:) every 600 secs. When the message is published, it waits 5 secs (timeout:)
 for the boker to reply in the "monitor/controller/ok" topic. If the broker replies the "on_message:" command is executed in a shell,
 otherwise the command in the "on_timeout:" is execute.
 
