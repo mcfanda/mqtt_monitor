@@ -72,9 +72,11 @@ class Mqmonitor:
         return(actions)
 
     def execute_shell(self,command):
-        output = subprocess.check_output(command,shell=True)
-        print(output)
-
+        try:
+          output = subprocess.check_output(command,shell=True)
+          logging.debug(output)
+        except:
+          logging.warning("the command %s failed" % command)
     def on_message(self,client, userdata, msg):
         logging.info("message received %s , %s" % (str(msg.topic),cleanmsg(msg.payload)))
         for rule in self.incoming:
