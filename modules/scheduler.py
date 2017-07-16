@@ -1,11 +1,12 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from pprint import pprint
+import logging
+
 
 itime={'days':0, 'weeks':0, 'hours':0, 'minutes':0, 'seconds':0}
 ctime={'hour':'*', 'minute':'*', 'second':'0'}
 
 def doNothing(arg):
-    print(arg)
+    logging.info(arg)
 
 def dict_merge(data,default):
     res={}
@@ -30,18 +31,18 @@ class Scheduler:
 
     def introspect(self):
         for job in self.scheduler.get_jobs():
-            print("Scheduler jobs:"+job.id+" scheduled for "+job.next_run_time.strftime("%H:%M:%S"))
+            logging.info("Scheduler jobs:"+job.id+" scheduled for "+job.next_run_time.strftime("%H:%M:%S"))
 
 
 
     def dispatch(self,rule):
         if 'interval' in rule:
-             print('Monitor: action "%s" activated with interval:' % rule['name'])
-             pprint(rule['interval']);
+             logging.info('action "%s" activated with interval:' % rule['name'])
+             logging.info("interval: %s" % rule['interval']);
              ltime=dict_merge(rule['interval'],itime)
              self.scheduler.add_job(self.job,'interval',args=[rule],id=rule['id'], hours=ltime['hours'],minutes=ltime['minutes'],seconds=ltime['seconds'],replace_existing=True)
         else:
-            print("nothing")
+            logging.info("nothing")
 
 
 

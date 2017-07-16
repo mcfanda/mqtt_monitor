@@ -3,6 +3,7 @@
 import paho.mqtt.client as mqtt
 from datetime import datetime
 from time import sleep
+import logging
 
 def cleanmsg(bytestring):
            res=str(bytestring)[1:]
@@ -28,23 +29,23 @@ class Mqconnect:
         con=False
         while (not con):
           try:
-             print("trying connecting to mqtt broker")
+             logging.info("trying connecting to mqtt broker")
              self.client.connect(self.ip, self.port, 60)
              con=True
           except Exception:
-             print("Problem with the connection") 
+             logging.warning("Problem with the connection") 
           sleep(15)   
-        print("connection shold be ok")
+        logging.info("connection shold be ok")
         self.client.loop_forever()
  
     def on_connect(self, client, userdata, flags, rc):
         if rc==0:
-           print("Mqconnect: Connected to topic %s with result code %s" % (self.topic,str(rc)))
+           logging.warning("Mqconnect: Connected to topic %s with result code %s" % (self.topic,str(rc)))
            self.client.subscribe(self.topic)
 
         else:
-             print("Mqconnect: Connection problems with code %s" % (str(rc)))
-             print("Trying again:")
+             logging.warning("Mqconnect: Connection problems with code %s" % (str(rc)))
+             logging.warning("Trying again:")
              sleep(10)
              self.start()
              
@@ -52,14 +53,14 @@ class Mqconnect:
         print("Mqconnect: received "+str(msg.topic))
 
     def on_disconnect(self, client, obj, rc):
-        print("connection to broker is gone. Trying reconnect...")
+        logging.warning("connection to broker is gone. Trying reconnect...")
         con=False
         while (not con):
           try:
              client.reconnect()
              con=True
           except Exception:
-             print("no joy")
+             logging.warning("no joy")
           sleep(10)
     
            
@@ -67,7 +68,7 @@ class Mqconnect:
        try:
           self.client.publish(topic,msg,retain=False)
        except Exception:
-           print("There is a problem in sendinf the message to %s" % topic )
+           logging.error("There is a problem in sendinf the message to %s" % topic )
 
 
 

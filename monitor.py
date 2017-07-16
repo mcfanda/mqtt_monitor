@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import os
 import sys
 import random
 import subprocess
@@ -6,8 +7,11 @@ import paho.mqtt.client as mqtt
 from modules.mqconnect import Mqconnect, cleanmsg
 from modules.conf import Conf
 from modules.scheduler import Scheduler
-from pprint import pprint
 import datetime
+import logging
+import argparse
+
+
 
 settings={
     'timeout' : 10
@@ -16,12 +20,13 @@ settings={
 class Mqmonitor:
     def __init__(self,path):
         conf=Conf(path)
-        sets=conf.getValue("settings","server")
+        logging.info('Reading configurarion in %s' % path) 
+        sets=conf.getValue("server")
         self.mqconnect=Mqconnect(sets['ip'],sets['port'])
 
         if "username" in sets:
                 self.mqconnect.client.username_pw_set(sets['username'],sets['password'])
-        mqtt_options=conf.getValue("settings","mqtt")
+        mqtt_options=conf.getValue("mqtt")
 
         if mqtt_options and "topic" in mqtt_options:
                 self.mqconnect.topic=mqtt_options['topic']
@@ -29,7 +34,7 @@ class Mqmonitor:
         if mqtt_options and "will" in mqtt_options:
                 self.mqconnect.client.will_set(mqtt_options['will'],"lost")
 
-        self.rules=conf.getValue("settings","rules")
+        self.rules=conf.getValue("rules")
         self.incoming=self.getActions("incoming")
         self.outgoing=self.getActions("outgoing")
         self.incoming=self.incoming+self.outgoing
@@ -71,13 +76,13 @@ class Mqmonitor:
         print(output)
 
     def on_message(self,client, userdata, msg):
-        print("message received %s , %s" % (str(msg.topic),cleanmsg(msg.payload)))
+        logging.info("message received %s , %s" % (str(msg.topic),cleanmsg(msg.payload)))
         for rule in self.incoming:
             if rule['expect']==str(msg.topic):
                 if rule["expect_payload"] and rule["expect_payload"]!=cleanmsg(msg.payload):
-                    print("message %s with payload %s received but does not match %s " % (str(msg.topic),cleanmsg(msg.payload),rule["expect_payload"]))
+                    logging.info("message %s with payload %s received but does not match %s " % (str(msg.topic),cleanmsg(msg.payload),rule["expect_payload"]))
                     continue
-                print("Processing message %s with payload %s received and match %s " % (str(msg.topic),cleanmsg(msg.payload),rule["expect_payload"]))
+                logging.info("Processing message %s with payload %s received and match %s " % (str(msg.topic),cleanmsg(msg.payload),rule["expect_payload"]))
    
                 if "on_message" in rule:
                     self.execute_shell(rule['on_message'])
@@ -86,7 +91,7 @@ class Mqmonitor:
                     try:
                         self.sched.scheduler.remove_job(rule['id']+"on_timeout")
                     except:
-                        print("not timeout rule present")
+                        logging.info("not timeout rule present")
                 
                 if "reply" in rule:
                     self.mqconnect.send(rule['reply'],rule['reply_payload'])
@@ -95,7 +100,7 @@ class Mqmonitor:
                     try:
                         self.sched.scheduler.remove_job(rule['id']+"on_timeout_reply")
                     except:
-                        print("not timeout reply present")
+                        logging.info("not timeout reply present")
 
 
 
@@ -107,8 +112,8 @@ class Mqmonitor:
       if "on_timeout" in rule:
           when=datetime.datetime.now()
           when=when+datetime.timedelta(seconds=rule['timeout'])
-          print("action %s trigger at %s if timeout" % (rule['name'], when))
-          print("untrigger action by %s within %s" % (rule['expect'], rule['timeout']))
+          logging.info("action %s trigger at %s if timeout" % (rule['name'], when))
+          logging.info("untrigger action by %s within %s" % (rule['expect'], rule['timeout']))
           id=rule['id']+"on_timeout"
           self.sched.scheduler.add_job(self.execute_shell,trigger='date',run_date=when,args=[rule['on_timeout']],id=id,replace_existing=True)
       if "send" in rule:
@@ -121,8 +126,26 @@ class Mqmonitor:
  
           
 if __name__ == "__main__":
-       if len(sys.argv)<2 :
-          print("Please specify a setting file folder")
-          exit(1)
-       mqm=Mqmonitor(sys.argv[1])
+       parser = argparse.ArgumentParser()
+       parser.add_argument('-l', '--log', default="check_string_for_empty")
+       parser.add_argument('dir', nargs='*', default="no")
+       opts = parser.parse_args()
+#       logging.basicConfig(level=logging.DEBUG)
+      
+       if opts.log:
+          
+          if opts.log=="check_string_for_empty":
+             logging.basicConfig(level=logging.WARNING)
+          if opts.log=="DEBUG":
+             print("loging to debug")
+             logging.basicConfig(level=logging.DEBUG)
+          if opts.log=="WARNING":
+             logging.basicConfig(level=logging.WARNING)
+
+       if  opts.dir=="no":
+             logging.warning("No settings file has been given. settings.yaml in  local folder used.")
+             path=os.getcwd()+"/settings.yaml"
+       else:
+           path="".join(opts.dir)
+       mqm=Mqmonitor(path)
        mqm.start()
