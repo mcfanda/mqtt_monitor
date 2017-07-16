@@ -37,7 +37,8 @@ class Mqmonitor:
         self.sched.setJob(self.job)
         for rule in self.outgoing:
                 self.sched.dispatch(rule)
-
+        for r in self.incoming:
+             print(r['name'])
     def process(self,action):
         action['id']=str(random.randint(1, 10000000000000))
         if "name" not in action:
@@ -70,12 +71,13 @@ class Mqmonitor:
         print(output)
 
     def on_message(self,client, userdata, msg):
+        print("message received %s , %s" % (str(msg.topic),cleanmsg(msg.payload)))
         for rule in self.incoming:
             if rule['expect']==str(msg.topic):
                 if rule["expect_payload"] and rule["expect_payload"]!=cleanmsg(msg.payload):
                     print("message %s with payload %s received but does not match %s " % (str(msg.topic),cleanmsg(msg.payload),rule["expect_payload"]))
                     continue
-                print("received message %s" % str(msg.topic))
+                print("Processing message %s with payload %s received and match %s " % (str(msg.topic),cleanmsg(msg.payload),rule["expect_payload"]))
    
                 if "on_message" in rule:
                     self.execute_shell(rule['on_message'])
