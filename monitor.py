@@ -119,6 +119,7 @@ class Mqmonitor:
           id=rule['id']+"on_timeout"
           self.sched.scheduler.add_job(self.execute_shell,trigger='date',run_date=when,args=[rule['on_timeout']],id=id,replace_existing=True)
       if "send" in rule:
+          logging.info("sending %s for action %s" % (rule['send_payload'],rule['expect']))
           self.mqconnect.send(rule['send'],rule['send_payload'])
       if "reply_on_timeout":
           when=datetime.datetime.now()
@@ -143,6 +144,8 @@ if __name__ == "__main__":
              logging.basicConfig(level=logging.DEBUG)
           if opts.log=="WARNING":
              logging.basicConfig(level=logging.WARNING)
+          if opts.log=="INFO":
+             logging.basicConfig(level=logging.INFO)
 
        if  opts.dir=="no":
              logging.warning("No settings file has been given. settings.yaml in  local folder used.")
