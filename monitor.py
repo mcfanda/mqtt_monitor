@@ -73,8 +73,9 @@ class Mqmonitor:
 
     def execute_shell(self,command):
         try:
-          output = subprocess.check_output(command,shell=True)
-          logging.debug(output)
+           subprocess.Popen(command,shell=True)
+#          output = subprocess.check_output(command,shell=True)
+#          logging.debug(output)
         except:
           logging.warning("the command %s failed" % command)
     def on_message(self,client, userdata, msg):
