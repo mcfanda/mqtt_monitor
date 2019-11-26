@@ -75,5 +75,5 @@ class Mqconnect:
 
 
 if __name__ == "__main__":
-  mq=Mqconnect("127.0.0.1",1883,username="pi",pasw="hdylmch8341")
+  mq=Mqconnect("127.0.0.1",1883,username="pi",pasw="SECRET")
   mq.start()
