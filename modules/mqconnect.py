@@ -20,11 +20,12 @@ class Mqconnect:
         self.client.on_message = self.on_message
         self.client.on_disconnect = self.on_disconnect
         self.topic="#"
+        self.alive=None
 
         if username:
              self.client.username_pw_set(username, password=pasw)
 
-    
+         
     def start(self):
         con=False
         while (not con):
@@ -38,10 +39,18 @@ class Mqconnect:
         logging.info("connection shold be ok")
         self.client.loop_forever()
  
+    def set_will(self,topic):
+          self.client.will_set(topic,"lost")
+          self.alive=topic
+
+
     def on_connect(self, client, userdata, flags, rc):
         if rc==0:
            logging.warning("Mqconnect: Connected to topic %s with result code %s" % (self.topic,str(rc)))
            self.client.subscribe(self.topic)
+           if self.alive is not None:
+              self.client.publish(self.alive,"alive",retain=False)
+
 
         else:
              logging.warning("Mqconnect: Connection problems with code %s" % (str(rc)))
