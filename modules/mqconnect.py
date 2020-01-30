@@ -40,7 +40,7 @@ class Mqconnect:
         self.client.loop_forever()
  
     def set_will(self,topic):
-          self.client.will_set(topic,"lost")
+          self.client.will_set(topic,"lost",retain=True)
           self.alive=topic
 
 
@@ -49,7 +49,7 @@ class Mqconnect:
            logging.warning("Mqconnect: Connected to topic %s with result code %s" % (self.topic,str(rc)))
            self.client.subscribe(self.topic)
            if self.alive is not None:
-              self.client.publish(self.alive,"alive",retain=False)
+              self.client.publish(self.alive,"alive",retain=True)
 
 
         else:
