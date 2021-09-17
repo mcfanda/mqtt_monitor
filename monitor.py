@@ -122,7 +122,7 @@ class Mqmonitor:
       if "send" in rule:
           logging.info("sending %s for action %s" % (rule['send_payload'],rule['expect']))
           self.mqconnect.send(rule['send'],rule['send_payload'])
-      if "reply_on_timeout":
+      if "reply_on_timeout" in rule:
           when=datetime.datetime.now()
           when=when+datetime.timedelta(seconds=rule['timeout'])
           id=rule['id']+"on_timeout_reply"
